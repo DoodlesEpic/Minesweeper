@@ -6,6 +6,8 @@ wxBEGIN_EVENT_TABLE(MainGUI, wxFrame)
 EVT_MENU(20001, MainGUI::EasyDifficulty)
 EVT_MENU(20002, MainGUI::MediumDifficulty)
 EVT_MENU(20003, MainGUI::HardDifficulty)
+EVT_MENU(20004, MainGUI::NewGame)
+EVT_MENU(20005, MainGUI::CloseGame)
 wxEND_EVENT_TABLE()
 
 // Init a frame without a parent frame
@@ -19,7 +21,13 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 	menuBar = new wxMenuBar();
 	this->SetMenuBar(menuBar);
 
-	// Create the menu bar itens
+	// Create the menu bar items for game
+	wxMenu* gameMenu = new wxMenu();
+	gameMenu->Append(20004, "Restart");
+	gameMenu->Append(20005, "Exit");
+	menuBar->Append(gameMenu, "Game");
+
+	// Create the menu bar items for difficulty
 	wxMenu *difficultyMenu = new wxMenu();
 	difficultyMenu->Append(20001, "Easy");
 	difficultyMenu->Append(20002, "Medium");
@@ -258,4 +266,16 @@ void MainGUI::HardDifficulty(wxCommandEvent& event)
 
 	// Generate new field with correct difficulty
 	GenerateNewField(15, 15, 80);
+}
+
+void MainGUI::NewGame(wxCommandEvent& event)
+{
+	GameOverReset();
+	event.Skip();
+}
+
+void MainGUI::CloseGame(wxCommandEvent& event)
+{
+	Close();
+	event.Skip();
 }

@@ -44,9 +44,15 @@ protected:
 	// Used to generate a new field (on game start, and difficulty change)
 	void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
 
-	// Set the game difficulty using the menu
+	// The top menu bar
 	wxMenuBar* menuBar = nullptr;
+
+	// Difficulty event handlers
 	void EasyDifficulty(wxCommandEvent& event);
 	void MediumDifficulty(wxCommandEvent& event);
 	void HardDifficulty(wxCommandEvent& event);
+
+	// Game menu event handlers
+	void NewGame(wxCommandEvent& event);
+	void CloseGame(wxCommandEvent& event);
 };
