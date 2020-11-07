@@ -85,7 +85,6 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 			{
 				// Plant a mine at the location
 				fieldMines[mineIndex] = Mine::Planted;
-				buttons[mineIndex]->SetLabel("BOMB");
 
 				// Count the mine planted
 				++minesPlanted;
