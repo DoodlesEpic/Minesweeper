@@ -1,6 +1,9 @@
 #pragma once
 #include "wx/wx.h"
 
+// Possible states of the mines in the field
+enum class Mine { Planted, Empty };
+
 class MainGUI : public wxFrame
 {
 public:
@@ -12,8 +15,17 @@ public:
 	int fieldWidth = 10;
 	int fieldHeight = 10;
 
+	// Numbers of mines to be displaced on the field
+	int mines = 30;
+
 	// 1D Array of pointers to buttons on the grid
 	wxButton** buttons;
+
+	// Array of mines to store the state of each of the mines
+	Mine *fieldMines = nullptr;
+
+	// Remeber if this is the first click so there's no fail in the first click
+	bool isFirstClick = true;
 
 	// Handles the click of any button in the minesweeper grid
 	void OnButtonClicked(wxCommandEvent& event);
