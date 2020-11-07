@@ -98,6 +98,21 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 	// If it's not the first click, check if the button was a bomb
 	else if (fieldMines[buttonIndex] == Mine::Planted)
 	{
+		// Display where the bombs where planted
+		for (int i = 0; i < fieldWidth; i++)
+		{
+			for (int j = 0; j < fieldHeight; j++)
+			{
+				// Get the mine index from the 2d grid to the 1d array
+				const int mineIndex = j * fieldWidth + i;
+
+				if (fieldMines[mineIndex] == Mine::Planted)
+				{
+					buttons[mineIndex]->SetLabel("Bomb");
+				}
+			}
+		}
+
 		// Display the end game message
 		wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
 
@@ -133,13 +148,13 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 			for (int j = -1; j < 2; j++)
 			{
 				// Guarante this is not an out of bounds index
-				const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth && buttonY + j >= 0 && buttonY + j < fieldHeight;
-				
+				const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth&& buttonY + j >= 0 && buttonY + j < fieldHeight;
+
 				if (isValidIndex)
 				{
 					// Get the mine index from the 2d grid to the 1d array
 					const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
-					
+
 					// If there's a bomb planted at the location, count neighbour mines
 					if (fieldMines[neighbourMineIndex] == Mine::Planted)
 					{
