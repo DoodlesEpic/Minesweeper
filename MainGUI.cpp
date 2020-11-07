@@ -178,6 +178,7 @@ void MainGUI::GameOverReset()
 {
 	// Reset the game
 	isFirstClick = true;
+	clickedSquares = 0;
 
 	// We only clear the field, but don't regenerate it
 	// This is because the next click will trigger the field generation
