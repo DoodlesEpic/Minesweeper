@@ -99,15 +99,15 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 		isFirstClick = false;
 	}
 
-	// If it's not the first click, check if the button was a bomb
-	else if (fieldMines[buttonIndex] == Mine::Planted)
+	// Check if the button was a bomb
+	if (fieldMines[buttonIndex] == Mine::Planted)
 	{
 		DisplayBombsLocation();
 		wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
 		GameOverReset();
 	}
 
-	// This is not the first click, and there's no mine planted
+	// There's no mine planted, count the surrounding mines and show the game win screen
 	else
 	{
 		// Count neighbour mines to display the label
