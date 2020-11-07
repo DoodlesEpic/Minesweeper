@@ -10,7 +10,7 @@ public:
 	MainGUI();
 	~MainGUI();
 
-public:
+protected:
 	// Width and height for the minesweeper grid
 	int fieldWidth = 10;
 	int fieldHeight = 10;
@@ -37,7 +37,6 @@ public:
 	// Declare the event table so it can handle the button click
 	wxDECLARE_EVENT_TABLE();
 
-protected:
 	// Functions used in the game over situation
 	void DisplayBombsLocation();
 	void GameOverReset();
