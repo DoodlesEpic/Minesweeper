@@ -48,9 +48,10 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 
 MainGUI::~MainGUI()
 {
-	// Delete the buttons array to prevent memleak
+	// Delete the buttons and fieldMines array to prevent memleaks
 	// We don't need to handle the buttons themselves because wx does it for us
 	delete[] buttons;
+	delete[] fieldMines;
 }
 
 // Handles the click of any button in the minesweeper grid
