@@ -67,6 +67,9 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 	// Prevent this button from being clicked again
 	buttons[buttonIndex]->Enable(false);
 
+	// Track how many squares we have clicked already
+	++clickedSquares;
+
 	// On the first click, generate the field mines
 	if (isFirstClick)
 	{
@@ -99,44 +102,9 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 	// If it's not the first click, check if the button was a bomb
 	else if (fieldMines[buttonIndex] == Mine::Planted)
 	{
-		// Display where the bombs where planted
-		for (int i = 0; i < fieldWidth; i++)
-		{
-			for (int j = 0; j < fieldHeight; j++)
-			{
-				// Get the mine index from the 2d grid to the 1d array
-				const int mineIndex = j * fieldWidth + i;
-
-				if (fieldMines[mineIndex] == Mine::Planted)
-				{
-					buttons[mineIndex]->SetLabel("Bomb");
-				}
-			}
-		}
-
-		// Display the end game message
+		DisplayBombsLocation();
 		wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
-
-		// Reset the game afterwards
-		isFirstClick = true;
-
-		// We only clear the field, but don't regenerate it
-		// This is because the next click will trigger the field generation
-		for (int i = 0; i < fieldWidth; i++)
-		{
-			for (int j = 0; j < fieldHeight; j++)
-			{
-				// Get the grid index from the 2d grid to the 1d array
-				const int index = j * fieldWidth + i;
-
-				// Remove any planted mines
-				fieldMines[index] = Mine::Empty;
-
-				// Reset the label and enable the button
-				buttons[index]->SetLabel("");
-				buttons[index]->Enable(true);
-			}
-		}
+		GameOverReset();
 	}
 
 	// This is not the first click, and there's no mine planted
@@ -170,7 +138,58 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 		{
 			buttons[buttonIndex]->SetLabel(std::to_string(neighbourMines));
 		}
+
+		// Check for the winning game condition
+		if (clickedSquares == (fieldWidth * fieldHeight) - mines)
+		{
+			DisplayBombsLocation();
+			wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
+			GameOverReset();
+		}
 	}
 
 	event.Skip();
+}
+
+// Display where the bombs where planted
+void MainGUI::DisplayBombsLocation()
+{
+	for (int i = 0; i < fieldWidth; i++)
+	{
+		for (int j = 0; j < fieldHeight; j++)
+		{
+			// Get the mine index from the 2d grid to the 1d array
+			const int mineIndex = j * fieldWidth + i;
+
+			if (fieldMines[mineIndex] == Mine::Planted)
+			{
+				buttons[mineIndex]->SetLabel("Bomb");
+			}
+		}
+	}
+}
+
+// Resets the game field and first click variable
+void MainGUI::GameOverReset()
+{
+	// Reset the game
+	isFirstClick = true;
+
+	// We only clear the field, but don't regenerate it
+	// This is because the next click will trigger the field generation
+	for (int i = 0; i < fieldWidth; i++)
+	{
+		for (int j = 0; j < fieldHeight; j++)
+		{
+			// Get the grid index from the 2d grid to the 1d array
+			const int index = j * fieldWidth + i;
+
+			// Remove any planted mines
+			fieldMines[index] = Mine::Empty;
+
+			// Reset the label and enable the button
+			buttons[index]->SetLabel("");
+			buttons[index]->Enable(true);
+		}
+	}
 }

@@ -18,11 +18,14 @@ public:
 	// Numbers of mines to be displaced on the field
 	int mines = 30;
 
+	// Track how many squares were clicked so we can display the winning screen
+	int clickedSquares = 0;
+
 	// 1D Array of pointers to buttons on the grid
 	wxButton** buttons;
 
 	// Array of mines to store the state of each of the mines
-	Mine *fieldMines = nullptr;
+	Mine* fieldMines = nullptr;
 
 	// Remeber if this is the first click so there's no fail in the first click
 	bool isFirstClick = true;
@@ -32,4 +35,9 @@ public:
 
 	// Declare the event table so it can handle the button click
 	wxDECLARE_EVENT_TABLE();
+
+protected:
+	// Functions used in the game over situation
+	void DisplayBombsLocation();
+	void GameOverReset();
 };
