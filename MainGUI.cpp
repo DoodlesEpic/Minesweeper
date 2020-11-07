@@ -12,6 +12,9 @@ wxEND_EVENT_TABLE()
 // Make the default size 800x600
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600))
 {
+	// Create a font to use on the buttons
+	wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+
 	// Create the whole grid of buttons
 	buttons = new wxButton * [fieldWidth * fieldHeight];
 
@@ -31,6 +34,7 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 
 			// Create a new button and bind an event handler to the clicked event
 			buttons[buttonIndex] = new wxButton(this, 10000 + buttonIndex);
+			buttons[buttonIndex]->SetFont(font);
 			buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
 
 			// Initialize the default mine state to empty
