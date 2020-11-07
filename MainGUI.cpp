@@ -3,6 +3,9 @@
 // The event table maps events to handler functions
 // The ids here and where we build the components must be equal
 wxBEGIN_EVENT_TABLE(MainGUI, wxFrame)
+EVT_MENU(20001, MainGUI::EasyDifficulty)
+EVT_MENU(20002, MainGUI::MediumDifficulty)
+EVT_MENU(20003, MainGUI::HardDifficulty)
 wxEND_EVENT_TABLE()
 
 // Init a frame without a parent frame
@@ -12,42 +15,23 @@ wxEND_EVENT_TABLE()
 // Make the default size 800x600
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600))
 {
-	// Create a font to use on the buttons
-	wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+	// Create the menu bar
+	menuBar = new wxMenuBar();
+	this->SetMenuBar(menuBar);
 
-	// Create the whole grid of buttons
-	buttons = new wxButton * [fieldWidth * fieldHeight];
+	// Create the menu bar itens
+	wxMenu *difficultyMenu = new wxMenu();
+	difficultyMenu->Append(20001, "Easy");
+	difficultyMenu->Append(20002, "Medium");
+	difficultyMenu->Append(20003, "Hard");
+	menuBar->Append(difficultyMenu, "Difficulty");
 
 	// Create a sizer grid to displace the buttons on
-	wxGridSizer* buttonGrid = new wxGridSizer(fieldWidth, fieldHeight, 0, 0);
-
-	// Initialize the array for the mines states too
-	fieldMines = new Mine[fieldWidth * fieldHeight];
-
-	// Dinamically generate the minesweep field
-	for (int i = 0; i < fieldWidth; i++)
-	{
-		for (int j = 0; j < fieldHeight; j++)
-		{
-			// Get the button index from the 2d grid to the 1d array
-			const int buttonIndex = j * fieldWidth + i;
-
-			// Create a new button and bind an event handler to the clicked event
-			buttons[buttonIndex] = new wxButton(this, 10000 + buttonIndex);
-			buttons[buttonIndex]->SetFont(font);
-			buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
-
-			// Initialize the default mine state to empty
-			fieldMines[buttonIndex] = Mine::Empty;
-
-			// Put the new button inside the button grid
-			buttonGrid->Add(buttons[buttonIndex], 1, wxEXPAND | wxALL);
-		}
-	}
-
-	// Use the sizer and update the layout
+	buttonGrid = new wxGridSizer(fieldWidth, fieldHeight, 0, 0);
 	this->SetSizer(buttonGrid);
-	buttonGrid->Layout();
+
+	// Generate a new field to start the game
+	GenerateNewField(fieldWidth, fieldHeight, mines);
 }
 
 MainGUI::~MainGUI()
@@ -197,4 +181,81 @@ void MainGUI::GameOverReset()
 			buttons[index]->Enable(true);
 		}
 	}
+}
+
+void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines)
+{
+	// Change the difficulty
+	fieldWidth = newFieldWidth;
+	fieldHeight = newFieldHeight;
+	mines = newMines;
+
+	// Guarantee no memory leaks
+	delete[] buttons;
+	delete[] fieldMines;
+
+	// Remove all buttons and ajust columns and rows
+	buttonGrid->Clear(true);
+	buttonGrid->SetCols(fieldWidth);
+	buttonGrid->SetRows(fieldHeight);
+
+	// Create the new grid of buttons
+	buttons = new wxButton * [fieldWidth * fieldHeight];
+
+	// Initialize the array for the mines states too
+	fieldMines = new Mine[fieldWidth * fieldHeight];
+
+	// Create a font to use on the buttons
+	wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+
+	// Dinamically generate the minesweep field
+	for (int i = 0; i < fieldWidth; i++)
+	{
+		for (int j = 0; j < fieldHeight; j++)
+		{
+			// Get the button index from the 2d grid to the 1d array
+			const int buttonIndex = j * fieldWidth + i;
+
+			// Create a new button and bind an event handler to the clicked event
+			buttons[buttonIndex] = new wxButton(this, 10000 + buttonIndex);
+			buttons[buttonIndex]->SetFont(font);
+			buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
+
+			// Initialize the default mine state to empty
+			fieldMines[buttonIndex] = Mine::Empty;
+
+			// Put the new button inside the button grid
+			buttonGrid->Add(buttons[buttonIndex], 1, wxEXPAND | wxALL);
+		}
+	}
+
+	// Use the sizer and update the layout
+	buttonGrid->Layout();
+}
+
+void MainGUI::EasyDifficulty(wxCommandEvent& event)
+{
+	// Reset the game
+	GameOverReset();
+
+	// Generate new field with correct difficulty
+	GenerateNewField(5, 5, 6);
+}
+
+void MainGUI::MediumDifficulty(wxCommandEvent& event)
+{
+	// Reset the game
+	GameOverReset();
+
+	// Generate new field with correct difficulty
+	GenerateNewField(10, 10, 30);
+}
+
+void MainGUI::HardDifficulty(wxCommandEvent& event)
+{
+	// Reset the game
+	GameOverReset();
+
+	// Generate new field with correct difficulty
+	GenerateNewField(15, 15, 80);
 }

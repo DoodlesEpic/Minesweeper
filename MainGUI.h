@@ -21,8 +21,9 @@ public:
 	// Track how many squares were clicked so we can display the winning screen
 	int clickedSquares = 0;
 
-	// 1D Array of pointers to buttons on the grid
+	// 1D Array of pointers to buttons on the grid, and the grid sizer
 	wxButton** buttons;
+	wxGridSizer* buttonGrid;
 
 	// Array of mines to store the state of each of the mines
 	Mine* fieldMines = nullptr;
@@ -40,4 +41,13 @@ protected:
 	// Functions used in the game over situation
 	void DisplayBombsLocation();
 	void GameOverReset();
+
+	// Used to generate a new field (on game start, and difficulty change)
+	void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
+
+	// Set the game difficulty using the menu
+	wxMenuBar* menuBar = nullptr;
+	void EasyDifficulty(wxCommandEvent& event);
+	void MediumDifficulty(wxCommandEvent& event);
+	void HardDifficulty(wxCommandEvent& event);
 };
