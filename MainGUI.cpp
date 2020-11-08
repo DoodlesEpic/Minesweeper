@@ -178,7 +178,7 @@ void MainGUI::DisplayBombsLocation()
 
 			if (fieldMines[mineIndex] == Mine::Planted)
 			{
-				buttons[mineIndex]->SetLabel("Bomb");
+				buttons[mineIndex]->SetLabel(L"💣");
 			}
 		}
 	}
