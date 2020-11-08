@@ -33,6 +33,7 @@ protected:
 
 	// Handles the click of any button in the minesweeper grid
 	void OnButtonClicked(wxCommandEvent& event);
+	void OnButtonRightClicked(wxMouseEvent& event);
 
 	// Declare the event table so it can handle the button click
 	wxDECLARE_EVENT_TABLE();

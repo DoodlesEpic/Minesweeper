@@ -1,4 +1,4 @@
-#include "MainGUI.h"
+﻿#include "MainGUI.h"
 
 // The event table maps events to handler functions
 // The ids here and where we build the components must be equal
@@ -147,6 +147,25 @@ void MainGUI::OnButtonClicked(wxCommandEvent& event)
 	event.Skip();
 }
 
+void MainGUI::OnButtonRightClicked(wxMouseEvent& event)
+{
+	// Find the coordinates of the clicked button
+	const int buttonX = (event.GetId() - 10000) % fieldWidth;
+	const int buttonY = (event.GetId() - 10000) / fieldHeight;
+
+	// Get the button index from the 2d grid to the 1d array
+	const int buttonIndex = buttonY * fieldWidth + buttonX;
+
+	if (buttons[buttonIndex]->GetLabel() == "")
+	{
+		buttons[buttonIndex]->SetLabel(L"🚩");
+	}
+	else
+	{
+		buttons[buttonIndex]->SetLabel("");
+	}
+}
+
 // Display where the bombs where planted
 void MainGUI::DisplayBombsLocation()
 {
@@ -228,6 +247,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
 			buttons[buttonIndex] = new wxButton(this, 10000 + buttonIndex);
 			buttons[buttonIndex]->SetFont(font);
 			buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
+			buttons[buttonIndex]->Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(MainGUI::OnButtonRightClicked), NULL, this);
 
 			// Initialize the default mine state to empty
 			fieldMines[buttonIndex] = Mine::Empty;
