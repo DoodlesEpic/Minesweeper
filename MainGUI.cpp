@@ -1,22 +1,25 @@
 ﻿#include "MainGUI.h"
-#include <memory>
 
 // The event table maps events to handler functions
 // The ids here and where we build the components must be equal
-wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) EVT_MENU(20001, MainGUI::EasyDifficulty);
-EVT_MENU(20002, MainGUI::MediumDifficulty);
-EVT_MENU(20003, MainGUI::HardDifficulty);
-EVT_MENU(20004, MainGUI::NewGame);
-EVT_MENU(20005, MainGUI::CloseGame) wxEND_EVENT_TABLE();
+
+// Disable clang-format because it doesn't know how to ident these macros
+// clang-format off
+wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) EVT_MENU(20001, MainGUI::EasyDifficulty)
+EVT_MENU(20002, MainGUI::MediumDifficulty)
+EVT_MENU(20003, MainGUI::HardDifficulty)
+EVT_MENU(20004, MainGUI::NewGame)
+EVT_MENU(20005, MainGUI::CloseGame) wxEND_EVENT_TABLE()
 
 // Init a frame without a parent frame
 // Init with any frame ID
 // Also set the title of the frame
 // Make the default starting location 30x30
 // Make the default size 800x600
-MainGUI::MainGUI()
-    : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30),
-              wxSize(800, 600)) {
+MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
+  // clang-format on
+  // Reenable clang-format as it's not a problem to format the following code
+
   // Create the menu bar
   menuBar = new wxMenuBar();
   this->SetMenuBar(menuBar);
