@@ -1,14 +1,13 @@
 #pragma once
-#include "wx/wx.h"
 #include "MainGUI.h"
+#include "wx/wx.h"
 
-class App : public wxApp
-{
+class App : public wxApp {
 public:
-	App();
-	~App();
-	virtual bool OnInit();
+  App();
+  ~App();
+  virtual bool OnInit();
 
 private:
-	MainGUI* mainWindow = nullptr;
+  MainGUI *mainWindow = nullptr;
 };
