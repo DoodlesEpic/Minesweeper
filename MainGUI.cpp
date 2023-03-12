@@ -202,10 +202,6 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   fieldHeight = newFieldHeight;
   mines = newMines;
 
-  // Guarantee no memory leaks
-  delete[] buttons;
-  delete[] fieldMines;
-
   // Remove all buttons and ajust columns and rows
   buttonGrid->Clear(true);
   buttonGrid->SetCols(fieldWidth);
