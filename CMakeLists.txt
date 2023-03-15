@@ -13,11 +13,7 @@ set(wxWidgets_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/wxWidgets")
 set(wxWidgets_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/wxWidgets/lib/vc_x64_lib")
 set(wxWidgets_CONFIGURATION  "msw")
 
-find_package(wxWidgets REQUIRED COMPONENTS core base)
-if(wxWidgets_USE_FILE) # not defined in CONFIG mode
-    include(${wxWidgets_USE_FILE})
-endif()
-
+add_subdirectory(libs/wxWidgets)
 add_executable(Minesweeper
   WIN32
   App.cpp
