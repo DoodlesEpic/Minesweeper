@@ -20,7 +20,7 @@ add_executable(Minesweeper
   MainGUI.cpp
 )
 
-target_link_libraries(Minesweeper ${wxWidgets_LIBRARIES})
+target_link_libraries(Minesweeper wx::core wx::base)
 
 install(TARGETS Minesweeper
   DESTINATION bin
