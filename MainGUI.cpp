@@ -47,7 +47,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   const int buttonX = (event.GetId() - 10000) % fieldWidth;
   const int buttonY = (event.GetId() - 10000) / fieldHeight;
   const int buttonIndex = buttonY * fieldWidth + buttonX;
-  buttons[buttonIndex]->Enable(false);
+  buttons.at(buttonIndex)->Enable(false);
   ++clickedSquares;
 
   if (isFirstClick) {
@@ -56,8 +56,8 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
       const int mineY = rand() % fieldHeight;
       const int mineIndex = mineY * fieldWidth + mineX;
 
-      if (fieldMines[mineIndex] == Mine::Empty && mineX != buttonX && mineY != buttonY) {
-        fieldMines[mineIndex] = Mine::Planted;
+      if (fieldMines.at(mineIndex) == Mine::Empty && mineX != buttonX && mineY != buttonY) {
+        fieldMines.at(mineIndex) = Mine::Planted;
         ++minesPlanted;
       }
     }
@@ -66,7 +66,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   }
 
   // Check if the button was a bomb
-  if (fieldMines[buttonIndex] == Mine::Planted) {
+  if (fieldMines.at(buttonIndex) == Mine::Planted) {
     DisplayBombsLocation();
     wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
     GameOverReset();
@@ -82,7 +82,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
         if (isValidIndex) {
           const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
 
-          if (fieldMines[neighbourMineIndex] == Mine::Planted) {
+          if (fieldMines.at(neighbourMineIndex) == Mine::Planted) {
             ++neighbourMines;
           }
         }
@@ -90,7 +90,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
     }
 
     if (neighbourMines > 0) {
-      buttons[buttonIndex]->SetLabel(std::to_string(neighbourMines));
+      buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
     }
 
     if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
@@ -108,11 +108,8 @@ void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
   const int buttonY = (event.GetId() - 10000) / fieldHeight;
   const int buttonIndex = buttonY * fieldWidth + buttonX;
 
-  if (buttons[buttonIndex]->GetLabel() == "") {
-    buttons[buttonIndex]->SetLabel(L"🚩");
-  } else {
-    buttons[buttonIndex]->SetLabel("");
-  }
+  buttons.at(buttonIndex)->GetLabel() == "" ? buttons.at(buttonIndex)->SetLabel(L"🚩")
+                                            : buttons.at(buttonIndex)->SetLabel("");
 }
 
 void MainGUI::DisplayBombsLocation() {
@@ -120,8 +117,8 @@ void MainGUI::DisplayBombsLocation() {
     for (int j = 0; j < fieldHeight; j++) {
       const int mineIndex = j * fieldWidth + i;
 
-      if (fieldMines[mineIndex] == Mine::Planted) {
-        buttons[mineIndex]->SetLabel(L"💣");
+      if (fieldMines.at(mineIndex) == Mine::Planted) {
+        buttons.at(mineIndex)->SetLabel(L"💣");
       }
     }
   }
@@ -134,9 +131,9 @@ void MainGUI::GameOverReset() {
   for (int i = 0; i < fieldWidth; i++) {
     for (int j = 0; j < fieldHeight; j++) {
       const int index = j * fieldWidth + i;
-      fieldMines[index] = Mine::Empty;
-      buttons[index]->SetLabel("");
-      buttons[index]->Enable(true);
+      fieldMines.at(index) = Mine::Empty;
+      buttons.at(index)->SetLabel("");
+      buttons.at(index)->Enable(true);
     }
   }
 }
@@ -159,14 +156,13 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
     for (int j = 0; j < fieldHeight; j++) {
       const int buttonIndex = j * fieldWidth + i;
 
-      buttons[buttonIndex] = std::make_unique<wxButton>(this, 10000 + buttonIndex);
-      buttons[buttonIndex]->SetFont(font);
-      buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
-      buttons[buttonIndex]->Connect(wxEVT_RIGHT_DOWN,
-                                    wxMouseEventHandler(MainGUI::OnButtonRightClicked), NULL, this);
-      buttonGrid->Add(buttons[buttonIndex].get(), 1, wxEXPAND | wxALL);
+      buttons.at(buttonIndex) = std::make_unique<wxButton>(this, 10000 + buttonIndex);
+      buttons.at(buttonIndex)->SetFont(font);
+      buttons.at(buttonIndex)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
+      buttons.at(buttonIndex)->Bind(wxEVT_RIGHT_DOWN, &MainGUI::OnButtonRightClicked, this);
+      buttonGrid->Add(buttons.at(buttonIndex).get(), 1, wxEXPAND | wxALL);
 
-      fieldMines[buttonIndex] = Mine::Empty;
+      fieldMines.at(buttonIndex) = Mine::Empty;
     }
   }
 
