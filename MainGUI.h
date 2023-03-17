@@ -1,5 +1,6 @@
 #pragma once
 #include "wx/wx.h"
+#include <memory>
 
 enum class Mine { Planted, Empty };
 
@@ -18,7 +19,7 @@ protected:
   wxButton **buttons;
   wxGridSizer *buttonGrid;
   wxMenuBar *menuBar;
-  Mine *fieldMines;
+  std::unique_ptr<Mine[]> fieldMines;
 
   wxDECLARE_EVENT_TABLE();
 

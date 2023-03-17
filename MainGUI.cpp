@@ -1,4 +1,5 @@
 ﻿#include "MainGUI.h"
+#include <memory>
 
 // Disable clang-format because it doesn't know how to ident these macros
 // clang-format off
@@ -37,10 +38,7 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
   GenerateNewField(fieldWidth, fieldHeight, mines);
 }
 
-MainGUI::~MainGUI() {
-  delete[] buttons;
-  delete[] fieldMines;
-}
+MainGUI::~MainGUI() { delete[] buttons; }
 
 // Handles the click of any button in the minesweeper grid
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
@@ -156,7 +154,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   buttonGrid->SetRows(fieldHeight);
 
   buttons = new wxButton *[fieldWidth * fieldHeight];
-  fieldMines = new Mine[fieldWidth * fieldHeight];
+  fieldMines = std::make_unique<Mine[]>(fieldWidth * fieldHeight);
 
   wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
               false);
