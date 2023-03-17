@@ -23,6 +23,8 @@ protected:
 
   wxDECLARE_EVENT_TABLE();
 
+  int CountNeighbours(int buttonX, int buttonY);
+
   void OnButtonClicked(wxCommandEvent &event);
   void OnButtonRightClicked(wxMouseEvent &event);
 

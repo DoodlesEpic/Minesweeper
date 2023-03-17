@@ -50,7 +50,17 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   buttons.at(buttonIndex)->Enable(false);
   ++clickedSquares;
 
+  // Check if the button was a bomb
+  if (fieldMines.at(buttonIndex) == Mine::Planted) {
+    DisplayBombsLocation();
+    wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
+    GameOverReset();
+    return;
+  }
+
+  // Field is generated on first click to guarantee no first click loss
   if (isFirstClick) {
+    isFirstClick = false;
     for (int minesPlanted = 0; minesPlanted < mines;) {
       const int mineX = rand() % fieldWidth;
       const int mineY = rand() % fieldHeight;
@@ -61,46 +71,40 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
         ++minesPlanted;
       }
     }
-
-    isFirstClick = false;
   }
 
-  // Check if the button was a bomb
-  if (fieldMines.at(buttonIndex) == Mine::Planted) {
+  const int neighbourMines = CountNeighbours(buttonX, buttonY);
+  if (neighbourMines > 0) {
+    buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
+  }
+
+  if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
     DisplayBombsLocation();
-    wxMessageBox("CHERNOBYL WAS AVOIDABLE, THIS WAS NOT", "You lost the game");
+    wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
     GameOverReset();
   }
 
-  else {
-    int neighbourMines = 0;
-    for (int i = -1; i < 2; i++) {
-      for (int j = -1; j < 2; j++) {
-        const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth &&
-                                  buttonY + j >= 0 && buttonY + j < fieldHeight;
+  event.Skip();
+}
 
-        if (isValidIndex) {
-          const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
+int MainGUI::CountNeighbours(int buttonX, int buttonY) {
+  int neighbourMines = 0;
+  for (int i = -1; i < 2; i++) {
+    for (int j = -1; j < 2; j++) {
+      const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth && buttonY + j >= 0 &&
+                                buttonY + j < fieldHeight;
 
-          if (fieldMines.at(neighbourMineIndex) == Mine::Planted) {
-            ++neighbourMines;
-          }
+      if (isValidIndex) {
+        const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
+
+        if (fieldMines.at(neighbourMineIndex) == Mine::Planted) {
+          ++neighbourMines;
         }
       }
     }
-
-    if (neighbourMines > 0) {
-      buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
-    }
-
-    if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
-      DisplayBombsLocation();
-      wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
-      GameOverReset();
-    }
   }
 
-  event.Skip();
+  return neighbourMines;
 }
 
 void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
