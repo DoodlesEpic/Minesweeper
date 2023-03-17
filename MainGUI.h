@@ -16,7 +16,7 @@ protected:
   int mines = 30;
   int clickedSquares = 0;
 
-  std::unique_ptr<std::shared_ptr<wxButton>[]> buttons;
+  std::vector<std::unique_ptr<wxButton>> buttons;
   wxGridSizer *buttonGrid;
   wxMenuBar *menuBar;
   std::unique_ptr<Mine[]> fieldMines;

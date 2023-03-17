@@ -149,13 +149,12 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   fieldHeight = newFieldHeight;
   mines = newMines;
 
+  buttons = std::vector<std::unique_ptr<wxButton>>(fieldWidth * fieldHeight);
+  fieldMines = std::make_unique<Mine[]>(fieldWidth * fieldHeight);
+
   buttonGrid->Clear(true);
   buttonGrid->SetCols(fieldWidth);
   buttonGrid->SetRows(fieldHeight);
-
-  buttons =
-      std::make_unique<std::shared_ptr<wxButton>[]>(fieldWidth * fieldHeight);
-  fieldMines = std::make_unique<Mine[]>(fieldWidth * fieldHeight);
 
   wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
               false);
@@ -165,7 +164,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
       const int buttonIndex = j * fieldWidth + i;
 
       buttons[buttonIndex] =
-          std::make_shared<wxButton>(this, 10000 + buttonIndex);
+          std::make_unique<wxButton>(this, 10000 + buttonIndex);
       buttons[buttonIndex]->SetFont(font);
       buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED,
                                  &MainGUI::OnButtonClicked, this);
