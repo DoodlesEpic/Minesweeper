@@ -38,7 +38,7 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
   GenerateNewField(fieldWidth, fieldHeight, mines);
 }
 
-MainGUI::~MainGUI() { delete[] buttons; }
+MainGUI::~MainGUI() {}
 
 // Handles the click of any button in the minesweeper grid
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
@@ -153,7 +153,8 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   buttonGrid->SetCols(fieldWidth);
   buttonGrid->SetRows(fieldHeight);
 
-  buttons = new wxButton *[fieldWidth * fieldHeight];
+  buttons =
+      std::make_unique<std::shared_ptr<wxButton>[]>(fieldWidth * fieldHeight);
   fieldMines = std::make_unique<Mine[]>(fieldWidth * fieldHeight);
 
   wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
@@ -163,14 +164,15 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
     for (int j = 0; j < fieldHeight; j++) {
       const int buttonIndex = j * fieldWidth + i;
 
-      buttons[buttonIndex] = new wxButton(this, 10000 + buttonIndex);
+      buttons[buttonIndex] =
+          std::make_shared<wxButton>(this, 10000 + buttonIndex);
       buttons[buttonIndex]->SetFont(font);
       buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED,
                                  &MainGUI::OnButtonClicked, this);
       buttons[buttonIndex]->Connect(
           wxEVT_RIGHT_DOWN, wxMouseEventHandler(MainGUI::OnButtonRightClicked),
           NULL, this);
-      buttonGrid->Add(buttons[buttonIndex], 1, wxEXPAND | wxALL);
+      buttonGrid->Add(buttons[buttonIndex].get(), 1, wxEXPAND | wxALL);
 
       fieldMines[buttonIndex] = Mine::Empty;
     }
