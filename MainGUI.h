@@ -19,7 +19,7 @@ protected:
   std::vector<std::unique_ptr<wxButton>> buttons;
   wxGridSizer *buttonGrid;
   wxMenuBar *menuBar;
-  std::unique_ptr<Mine[]> fieldMines;
+  std::vector<Mine> fieldMines;
 
   wxDECLARE_EVENT_TABLE();
 

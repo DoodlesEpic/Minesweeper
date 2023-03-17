@@ -150,7 +150,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   mines = newMines;
 
   buttons = std::vector<std::unique_ptr<wxButton>>(fieldWidth * fieldHeight);
-  fieldMines = std::make_unique<Mine[]>(fieldWidth * fieldHeight);
+  fieldMines = std::vector<Mine>(fieldWidth * fieldHeight);
 
   buttonGrid->Clear(true);
   buttonGrid->SetCols(fieldWidth);
