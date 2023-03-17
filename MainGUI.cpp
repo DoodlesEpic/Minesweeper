@@ -3,11 +3,13 @@
 
 // Disable clang-format because it doesn't know how to ident these macros
 // clang-format off
-wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) EVT_MENU(20001, MainGUI::EasyDifficulty)
+wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) 
+EVT_MENU(20001, MainGUI::EasyDifficulty)
 EVT_MENU(20002, MainGUI::MediumDifficulty)
 EVT_MENU(20003, MainGUI::HardDifficulty)
 EVT_MENU(20004, MainGUI::NewGame)
-EVT_MENU(20005, MainGUI::CloseGame) wxEND_EVENT_TABLE()
+EVT_MENU(20005, MainGUI::CloseGame) 
+wxEND_EVENT_TABLE()
 
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
   // clang-format on
@@ -54,8 +56,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
       const int mineY = rand() % fieldHeight;
       const int mineIndex = mineY * fieldWidth + mineX;
 
-      if (fieldMines[mineIndex] == Mine::Empty && mineX != buttonX &&
-          mineY != buttonY) {
+      if (fieldMines[mineIndex] == Mine::Empty && mineX != buttonX && mineY != buttonY) {
         fieldMines[mineIndex] = Mine::Planted;
         ++minesPlanted;
       }
@@ -75,13 +76,11 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
     int neighbourMines = 0;
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        const bool isValidIndex = buttonX + i >= 0 &&
-                                  buttonX + i < fieldWidth &&
+        const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth &&
                                   buttonY + j >= 0 && buttonY + j < fieldHeight;
 
         if (isValidIndex) {
-          const int neighbourMineIndex =
-              (buttonY + j) * fieldWidth + (buttonX + i);
+          const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
 
           if (fieldMines[neighbourMineIndex] == Mine::Planted) {
             ++neighbourMines;
@@ -96,8 +95,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 
     if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
       DisplayBombsLocation();
-      wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS",
-                   "You won the game");
+      wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
       GameOverReset();
     }
   }
@@ -143,8 +141,7 @@ void MainGUI::GameOverReset() {
   }
 }
 
-void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
-                               int newMines) {
+void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines) {
   fieldWidth = newFieldWidth;
   fieldHeight = newFieldHeight;
   mines = newMines;
@@ -156,21 +153,17 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight,
   buttonGrid->SetCols(fieldWidth);
   buttonGrid->SetRows(fieldHeight);
 
-  wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
-              false);
+  wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
 
   for (int i = 0; i < fieldWidth; i++) {
     for (int j = 0; j < fieldHeight; j++) {
       const int buttonIndex = j * fieldWidth + i;
 
-      buttons[buttonIndex] =
-          std::make_unique<wxButton>(this, 10000 + buttonIndex);
+      buttons[buttonIndex] = std::make_unique<wxButton>(this, 10000 + buttonIndex);
       buttons[buttonIndex]->SetFont(font);
-      buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED,
-                                 &MainGUI::OnButtonClicked, this);
-      buttons[buttonIndex]->Connect(
-          wxEVT_RIGHT_DOWN, wxMouseEventHandler(MainGUI::OnButtonRightClicked),
-          NULL, this);
+      buttons[buttonIndex]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
+      buttons[buttonIndex]->Connect(wxEVT_RIGHT_DOWN,
+                                    wxMouseEventHandler(MainGUI::OnButtonRightClicked), NULL, this);
       buttonGrid->Add(buttons[buttonIndex].get(), 1, wxEXPAND | wxALL);
 
       fieldMines[buttonIndex] = Mine::Empty;
