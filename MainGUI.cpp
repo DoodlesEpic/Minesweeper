@@ -52,8 +52,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   }
 
   // Field is generated on first click to guarantee no first click loss
-  if (isFirstClick) {
-    isFirstClick = false;
+  if (clickedSquares == 1) {
     for (int minesPlanted = 0; minesPlanted < mines;) {
       const int mineX = rand() % fieldWidth;
       const int mineY = rand() % fieldHeight;
@@ -117,9 +116,7 @@ void MainGUI::DisplayBombsLocation() {
 }
 
 void MainGUI::GameOverReset() {
-  isFirstClick = true;
   clickedSquares = 0;
-
   std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
     const int index = &mine - &fieldMines.front();
     fieldMines.at(index) = Mine::Empty;

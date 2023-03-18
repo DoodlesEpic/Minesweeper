@@ -17,7 +17,6 @@ public:
   MainGUI();
 
 protected:
-  bool isFirstClick = true;
   int fieldWidth = 10;
   int fieldHeight = 10;
   int mines = 30;
