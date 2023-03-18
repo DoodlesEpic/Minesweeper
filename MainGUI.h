@@ -32,9 +32,7 @@ protected:
   void DisplayBombsLocation();
   void GameOverReset();
 
-  void EasyDifficulty(wxCommandEvent &event);
-  void MediumDifficulty(wxCommandEvent &event);
-  void HardDifficulty(wxCommandEvent &event);
+  void SetDifficulty(wxCommandEvent &event);
   void NewGame(wxCommandEvent &event);
   void CloseGame(wxCommandEvent &event);
 };

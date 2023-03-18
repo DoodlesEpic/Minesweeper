@@ -1,14 +1,21 @@
 ﻿#include "MainGUI.h"
 #include <memory>
+#include <unordered_map>
+
+enum ID {
+  ID_EASY = 20001,
+  ID_MEDIUM,
+  ID_HARD,
+  ID_NEW_GAME,
+  ID_CLOSE_GAME,
+};
 
 // Disable clang-format because it doesn't know how to ident these macros
 // clang-format off
 wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) 
-EVT_MENU(20001, MainGUI::EasyDifficulty)
-EVT_MENU(20002, MainGUI::MediumDifficulty)
-EVT_MENU(20003, MainGUI::HardDifficulty)
-EVT_MENU(20004, MainGUI::NewGame)
-EVT_MENU(20005, MainGUI::CloseGame) 
+EVT_MENU_RANGE(ID_EASY, ID_HARD, MainGUI::SetDifficulty)
+EVT_MENU(ID_NEW_GAME, MainGUI::NewGame)
+EVT_MENU(ID_CLOSE_GAME, MainGUI::CloseGame) 
 wxEND_EVENT_TABLE()
 
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
@@ -161,19 +168,16 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
   buttonGrid->Layout();
 }
 
-void MainGUI::EasyDifficulty(wxCommandEvent &event) {
-  GameOverReset();
-  GenerateNewField(5, 5, 6);
-}
+void MainGUI::SetDifficulty(wxCommandEvent &event) {
+  const std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
+      {ID_EASY, std::make_tuple(5, 5, 6)},
+      {ID_MEDIUM, std::make_tuple(10, 10, 30)},
+      {ID_HARD, std::make_tuple(15, 15, 80)}};
 
-void MainGUI::MediumDifficulty(wxCommandEvent &event) {
+  const auto lookupResult = difficulties.find(event.GetId());
+  std::tie(fieldWidth, fieldHeight, mines) = lookupResult->second;
   GameOverReset();
-  GenerateNewField(10, 10, 30);
-}
-
-void MainGUI::HardDifficulty(wxCommandEvent &event) {
-  GameOverReset();
-  GenerateNewField(15, 15, 80);
+  GenerateNewField(fieldWidth, fieldHeight, mines);
 }
 
 void MainGUI::NewGame(wxCommandEvent &event) {
