@@ -7,7 +7,6 @@ enum class Mine { Planted, Empty };
 class MainGUI : public wxFrame {
 public:
   MainGUI();
-  ~MainGUI();
 
 protected:
   bool isFirstClick = true;

@@ -43,8 +43,6 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
   GenerateNewField(fieldWidth, fieldHeight, mines);
 }
 
-MainGUI::~MainGUI() {}
-
 // Handles the click of any button in the minesweeper grid
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   const int buttonX = (event.GetId() - 10000) % fieldWidth;
