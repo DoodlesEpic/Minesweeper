@@ -21,17 +21,14 @@ protected:
   wxMenuBar *menuBar;
   std::vector<Mine> fieldMines;
 
-  wxDECLARE_EVENT_TABLE();
-
   int CountNeighbours(int buttonX, int buttonY);
-
-  void OnButtonClicked(wxCommandEvent &event);
-  void OnButtonRightClicked(wxMouseEvent &event);
-
   void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
   void DisplayBombsLocation();
   void GameOverReset();
 
+private:
+  void OnButtonClicked(wxCommandEvent &event);
+  void OnButtonRightClicked(wxMouseEvent &event);
   void SetDifficulty(wxCommandEvent &event);
   void NewGame(wxCommandEvent &event);
   void CloseGame(wxCommandEvent &event);

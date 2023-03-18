@@ -10,34 +10,30 @@ enum ID {
   ID_CLOSE_GAME,
 };
 
-// Disable clang-format because it doesn't know how to ident these macros
-// clang-format off
-wxBEGIN_EVENT_TABLE(MainGUI, wxFrame) 
-EVT_MENU_RANGE(ID_EASY, ID_HARD, MainGUI::SetDifficulty)
-EVT_MENU(ID_NEW_GAME, MainGUI::NewGame)
-EVT_MENU(ID_CLOSE_GAME, MainGUI::CloseGame) 
-wxEND_EVENT_TABLE()
-
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
-  // clang-format on
-  // Reenable clang-format as it's not a problem to format the following code
-
   // Create the menu bar
   menuBar = new wxMenuBar();
   this->SetMenuBar(menuBar);
 
   // Create the menu bar items for game
   wxMenu *gameMenu = new wxMenu();
-  gameMenu->Append(20004, "Restart");
-  gameMenu->Append(20005, "Exit");
+  gameMenu->Append(ID_NEW_GAME, "Restart");
+  gameMenu->Append(ID_CLOSE_GAME, "Exit");
   menuBar->Append(gameMenu, "Game");
 
   // Create the menu bar items for difficulty
   wxMenu *difficultyMenu = new wxMenu();
-  difficultyMenu->Append(20001, "Easy");
-  difficultyMenu->Append(20002, "Medium");
-  difficultyMenu->Append(20003, "Hard");
+  difficultyMenu->Append(ID_EASY, "Easy");
+  difficultyMenu->Append(ID_MEDIUM, "Medium");
+  difficultyMenu->Append(ID_HARD, "Hard");
   menuBar->Append(difficultyMenu, "Difficulty");
+
+  // Bind the event handlers to the menu items
+  menuBar->Bind(wxEVT_MENU, &MainGUI::NewGame, this, ID_NEW_GAME);
+  menuBar->Bind(wxEVT_MENU, &MainGUI::CloseGame, this, ID_CLOSE_GAME);
+  menuBar->Bind(wxEVT_MENU, &MainGUI::SetDifficulty, this, ID_EASY);
+  menuBar->Bind(wxEVT_MENU, &MainGUI::SetDifficulty, this, ID_MEDIUM);
+  menuBar->Bind(wxEVT_MENU, &MainGUI::SetDifficulty, this, ID_HARD);
 
   // Create a sizer grid to displace the buttons on
   buttonGrid = new wxGridSizer(fieldWidth, fieldHeight, 0, 0);
