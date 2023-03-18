@@ -117,15 +117,10 @@ void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
 }
 
 void MainGUI::DisplayBombsLocation() {
-  for (int i = 0; i < fieldWidth; i++) {
-    for (int j = 0; j < fieldHeight; j++) {
-      const int mineIndex = j * fieldWidth + i;
-
-      if (fieldMines.at(mineIndex) == Mine::Planted) {
-        buttons.at(mineIndex)->SetLabel(L"💣");
-      }
-    }
-  }
+  std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
+    if (mine == Mine::Planted)
+      buttons.at(&mine - &fieldMines.front())->SetLabel(L"💣");
+  });
 }
 
 void MainGUI::GameOverReset() {
