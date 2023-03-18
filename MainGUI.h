@@ -17,9 +17,9 @@ public:
   MainGUI();
 
 protected:
-  int fieldWidth = 10;
-  int fieldHeight = 10;
-  int mines = 30;
+  int fieldWidth = 16;
+  int fieldHeight = 16;
+  int mines = 40;
   int clickedSquares = 0;
 
   std::vector<std::unique_ptr<wxButton>> buttons;
