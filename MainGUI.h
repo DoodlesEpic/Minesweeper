@@ -4,6 +4,14 @@
 
 enum class Mine { Planted, Empty };
 
+enum ID {
+  ID_EASY = 20001,
+  ID_MEDIUM,
+  ID_HARD,
+  ID_NEW_GAME,
+  ID_CLOSE_GAME,
+};
+
 class MainGUI : public wxFrame {
 public:
   MainGUI();

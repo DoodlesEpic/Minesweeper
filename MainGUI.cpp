@@ -2,14 +2,6 @@
 #include <memory>
 #include <unordered_map>
 
-enum ID {
-  ID_EASY = 20001,
-  ID_MEDIUM,
-  ID_HARD,
-  ID_NEW_GAME,
-  ID_CLOSE_GAME,
-};
-
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
   // Create the menu bar
   menuBar = new wxMenuBar();
