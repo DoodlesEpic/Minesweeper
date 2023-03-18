@@ -1,5 +1,6 @@
 ﻿#include "MainGUI.h"
 #include <memory>
+#include <random>
 #include <unordered_map>
 
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
@@ -53,9 +54,14 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 
   // Field is generated on first click to guarantee no first click loss
   if (clickedSquares == 1) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, fieldWidth - 1);
+    std::uniform_int_distribution<> disY(0, fieldHeight - 1);
+
     for (int minesPlanted = 0; minesPlanted < mines;) {
-      const int mineX = rand() % fieldWidth;
-      const int mineY = rand() % fieldHeight;
+      const int mineX = disX(gen);
+      const int mineY = disY(gen);
       const int mineIndex = mineY * fieldWidth + mineX;
 
       if (fieldMines.at(mineIndex) == Mine::Empty && mineX != buttonX && mineY != buttonY) {
