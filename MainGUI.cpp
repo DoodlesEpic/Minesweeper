@@ -147,21 +147,16 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
   buttonGrid->SetCols(fieldWidth);
   buttonGrid->SetRows(fieldHeight);
 
-  wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
-
-  for (int i = 0; i < fieldWidth; i++) {
-    for (int j = 0; j < fieldHeight; j++) {
-      const int buttonIndex = j * fieldWidth + i;
-
-      buttons.at(buttonIndex) = std::make_unique<wxButton>(this, 10000 + buttonIndex);
-      buttons.at(buttonIndex)->SetFont(font);
-      buttons.at(buttonIndex)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
-      buttons.at(buttonIndex)->Bind(wxEVT_RIGHT_DOWN, &MainGUI::OnButtonRightClicked, this);
-      buttonGrid->Add(buttons.at(buttonIndex).get(), 1, wxEXPAND | wxALL);
-
-      fieldMines.at(buttonIndex) = Mine::Empty;
-    }
-  }
+  std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
+    const int index = &mine - &fieldMines.front();
+    wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+    buttons.at(index) = std::make_unique<wxButton>(this, 10000 + index);
+    buttons.at(index)->SetFont(font);
+    buttons.at(index)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
+    buttons.at(index)->Bind(wxEVT_RIGHT_DOWN, &MainGUI::OnButtonRightClicked, this);
+    buttonGrid->Add(buttons.at(index).get(), 1, wxEXPAND | wxALL);
+    fieldMines.at(index) = Mine::Empty;
+  });
 
   buttonGrid->Layout();
 }
