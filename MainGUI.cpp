@@ -1,4 +1,5 @@
 ﻿#include "MainGUI.h"
+#include "wx/wx.h"
 #include <algorithm>
 #include <memory>
 #include <random>
@@ -41,6 +42,11 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   const int buttonX = (event.GetId() - 10000) % fieldWidth;
   const int buttonY = (event.GetId() - 10000) / fieldHeight;
+  DiscoverMine(buttonX, buttonY);
+  event.Skip();
+}
+
+void MainGUI::DiscoverMine(int buttonX, int buttonY) {
   const int buttonIndex = buttonY * fieldWidth + buttonX;
   buttons.at(buttonIndex)->Enable(false);
   ++clickedSquares;
@@ -73,17 +79,36 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   }
 
   const int neighbourMines = CountNeighbours(buttonX, buttonY);
-  if (neighbourMines > 0) {
+  if (neighbourMines == 0)
+    DiscoverEmpty(buttonX, buttonY);
+  else
     buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
-  }
 
   if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
     DisplayBombsLocation();
     wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
     GameOverReset();
   }
+}
 
-  event.Skip();
+void MainGUI::DiscoverEmpty(int buttonX, int buttonY) {
+  buttons.at(buttonY * fieldWidth + buttonX)->Enable(false);
+
+  const int neighbourMines = CountNeighbours(buttonX, buttonY);
+  if (neighbourMines > 0)
+    return buttons.at(buttonY * fieldWidth + buttonX)->SetLabel(std::to_string(neighbourMines));
+
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      const bool validIndex = std::clamp(buttonX + i, 0, fieldWidth - 1) == buttonX + i &&
+                              std::clamp(buttonY + j, 0, fieldHeight - 1) == buttonY + j;
+      if (!validIndex)
+        continue;
+
+      if (buttons.at((buttonY + j) * fieldWidth + (buttonX + i))->IsEnabled())
+        DiscoverEmpty(buttonX + i, buttonY + j);
+    }
+  }
 }
 
 int MainGUI::CountNeighbours(int buttonX, int buttonY) {

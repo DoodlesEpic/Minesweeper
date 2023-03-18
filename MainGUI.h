@@ -28,6 +28,8 @@ protected:
   std::vector<Mine> fieldMines;
 
   int CountNeighbours(int buttonX, int buttonY);
+  void DiscoverMine(int buttonX, int buttonY);
+  void DiscoverEmpty(int buttonX, int buttonY);
   void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
   void DisplayBombsLocation();
   void GameOverReset();
