@@ -17,9 +17,9 @@ public:
   MainGUI();
 
 protected:
-  int fieldWidth = 10;
-  int fieldHeight = 10;
-  int mines = 30;
+  int fieldWidth = 16;
+  int fieldHeight = 16;
+  int mines = 40;
   int clickedSquares = 0;
 
   std::vector<std::unique_ptr<wxButton>> buttons;
@@ -28,6 +28,8 @@ protected:
   std::vector<Mine> fieldMines;
 
   int CountNeighbours(int buttonX, int buttonY);
+  void DiscoverMine(int buttonX, int buttonY);
+  void DiscoverEmpty(int buttonX, int buttonY);
   void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
   void DisplayBombsLocation();
   void GameOverReset();
