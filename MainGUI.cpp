@@ -1,4 +1,5 @@
 ﻿#include "MainGUI.h"
+#include <algorithm>
 #include <memory>
 #include <random>
 #include <unordered_map>
@@ -87,18 +88,17 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 
 int MainGUI::CountNeighbours(int buttonX, int buttonY) {
   int neighbourMines = 0;
-  for (int i = -1; i < 2; i++) {
-    for (int j = -1; j < 2; j++) {
-      const bool isValidIndex = buttonX + i >= 0 && buttonX + i < fieldWidth && buttonY + j >= 0 &&
-                                buttonY + j < fieldHeight;
 
-      if (isValidIndex) {
-        const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      const bool validIndex = std::clamp(buttonX + i, 0, fieldWidth - 1) == buttonX + i &&
+                              std::clamp(buttonY + j, 0, fieldHeight - 1) == buttonY + j;
+      if (!validIndex)
+        continue;
 
-        if (fieldMines.at(neighbourMineIndex) == Mine::Planted) {
-          ++neighbourMines;
-        }
-      }
+      const int neighbourMineIndex = (buttonY + j) * fieldWidth + (buttonX + i);
+      if (fieldMines.at(neighbourMineIndex) == Mine::Planted)
+        ++neighbourMines;
     }
   }
 
