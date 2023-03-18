@@ -80,10 +80,9 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY) {
 
   const int neighbourMines = CountNeighbours(buttonX, buttonY);
   if (neighbourMines == 0)
-    DiscoverEmpty(buttonX, buttonY);
-  else
-    buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
+    return DiscoverEmpty(buttonX, buttonY);
 
+  buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
   if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
     DisplayBombsLocation();
     wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
@@ -93,6 +92,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY) {
 
 void MainGUI::DiscoverEmpty(int buttonX, int buttonY) {
   buttons.at(buttonY * fieldWidth + buttonX)->Enable(false);
+  buttons.at(buttonY * fieldWidth + buttonX)->SetLabel("");
   ++clickedSquares;
 
   const int neighbourMines = CountNeighbours(buttonX, buttonY);
