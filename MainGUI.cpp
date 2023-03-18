@@ -65,7 +65,7 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
       const int mineY = disY(gen);
       const int mineIndex = mineY * fieldWidth + mineX;
 
-      if (fieldMines.at(mineIndex) == Mine::Empty && mineX != buttonX && mineY != buttonY) {
+      if (fieldMines.at(mineIndex) == Mine::Empty && (mineX != buttonX || mineY != buttonY)) {
         fieldMines.at(mineIndex) = Mine::Planted;
         ++minesPlanted;
       }
