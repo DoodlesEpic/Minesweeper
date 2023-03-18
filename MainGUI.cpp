@@ -93,6 +93,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY) {
 
 void MainGUI::DiscoverEmpty(int buttonX, int buttonY) {
   buttons.at(buttonY * fieldWidth + buttonX)->Enable(false);
+  ++clickedSquares;
 
   const int neighbourMines = CountNeighbours(buttonX, buttonY);
   if (neighbourMines > 0)
