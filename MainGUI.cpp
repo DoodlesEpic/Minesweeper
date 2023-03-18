@@ -127,14 +127,12 @@ void MainGUI::GameOverReset() {
   isFirstClick = true;
   clickedSquares = 0;
 
-  for (int i = 0; i < fieldWidth; i++) {
-    for (int j = 0; j < fieldHeight; j++) {
-      const int index = j * fieldWidth + i;
-      fieldMines.at(index) = Mine::Empty;
-      buttons.at(index)->SetLabel("");
-      buttons.at(index)->Enable(true);
-    }
-  }
+  std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
+    const int index = &mine - &fieldMines.front();
+    fieldMines.at(index) = Mine::Empty;
+    buttons.at(index)->SetLabel("");
+    buttons.at(index)->Enable(true);
+  });
 }
 
 void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines) {
