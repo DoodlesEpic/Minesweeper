@@ -72,7 +72,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
     }
   }
 
-  Sweep(buttonX, buttonY);
+  Sweep(buttonX, buttonY, buttonIndex);
   if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
     DisplayBombsLocation();
     wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
@@ -80,14 +80,14 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
   }
 }
 
-void MainGUI::Sweep(int buttonX, int buttonY) {
-  buttons.at(buttonY * fieldWidth + buttonX)->Enable(false);
-  buttons.at(buttonY * fieldWidth + buttonX)->SetLabel("");
+void MainGUI::Sweep(int buttonX, int buttonY, int buttonIndex) {
+  buttons.at(buttonIndex)->Enable(false);
+  buttons.at(buttonIndex)->SetLabel("");
   ++clickedSquares;
 
   const int neighbourMines = CountNeighbours(buttonX, buttonY);
   if (neighbourMines > 0)
-    return buttons.at(buttonY * fieldWidth + buttonX)->SetLabel(std::to_string(neighbourMines));
+    return buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
 
   for (int i = -1; i <= 1; i++) {
     for (int j = -1; j <= 1; j++) {
@@ -96,8 +96,9 @@ void MainGUI::Sweep(int buttonX, int buttonY) {
       if (!validIndex)
         continue;
 
-      if (buttons.at((buttonY + j) * fieldWidth + (buttonX + i))->IsEnabled())
-        Sweep(buttonX + i, buttonY + j);
+      const int neighbourIndex = (buttonY + j) * fieldWidth + (buttonX + i);
+      if (buttons.at(neighbourIndex)->IsEnabled())
+        Sweep(buttonX + i, buttonY + j, neighbourIndex);
     }
   }
 }
