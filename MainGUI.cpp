@@ -42,7 +42,7 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
   const int buttonIndex = event.GetId() - 10000;
   const int buttonX = buttonIndex % fieldWidth;
-  const int buttonY = buttonIndex / fieldHeight;
+  const int buttonY = buttonIndex / fieldWidth;
   DiscoverMine(buttonX, buttonY, buttonIndex);
   event.Skip();
 }
