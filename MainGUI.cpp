@@ -132,10 +132,7 @@ int MainGUI::CountNeighbours(int buttonX, int buttonY) {
 }
 
 void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
-  const int buttonX = (event.GetId() - 10000) % fieldWidth;
-  const int buttonY = (event.GetId() - 10000) / fieldHeight;
-  const int buttonIndex = buttonY * fieldWidth + buttonX;
-
+  const int buttonIndex = event.GetId() - 10000;
   buttons.at(buttonIndex)->GetLabel() == "" ? buttons.at(buttonIndex)->SetLabel(L"🚩")
                                             : buttons.at(buttonIndex)->SetLabel("");
 }
