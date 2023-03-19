@@ -179,7 +179,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
 }
 
 void MainGUI::SetDifficulty(wxCommandEvent &event) {
-  const std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
+  const static std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
       {ID_EASY, std::make_tuple(8, 8, 10)},
       {ID_MEDIUM, std::make_tuple(16, 16, 40)},
       {ID_HARD, std::make_tuple(30, 16, 99)}};
