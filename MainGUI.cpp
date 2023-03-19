@@ -7,7 +7,7 @@
 
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
   // Create the menu bar
-  menuBar = new wxMenuBar();
+  wxMenuBar *menuBar = new wxMenuBar();
   this->SetMenuBar(menuBar);
 
   // Create the menu bar items for game
