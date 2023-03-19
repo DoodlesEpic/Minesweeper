@@ -23,9 +23,8 @@ protected:
   int clickedSquares = 0;
 
   std::vector<std::unique_ptr<wxButton>> buttons;
-  wxGridSizer *buttonGrid;
-  wxMenuBar *menuBar;
   std::vector<Mine> fieldMines;
+  wxGridSizer *buttonGrid;
 
   int CountNeighbours(int buttonX, int buttonY);
   void DiscoverMine(int buttonX, int buttonY, int buttonIndex);

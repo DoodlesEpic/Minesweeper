@@ -7,7 +7,7 @@
 
 MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), wxSize(800, 600)) {
   // Create the menu bar
-  menuBar = new wxMenuBar();
+  wxMenuBar *menuBar = new wxMenuBar();
   this->SetMenuBar(menuBar);
 
   // Create the menu bar items for game
@@ -48,6 +48,10 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 }
 
 void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
+  // Immediatelly return if the button was flagged by the player
+  if (buttons.at(buttonIndex)->GetLabel() == L"🚩")
+    return;
+
   // Check if the button was a bomb
   if (fieldMines.at(buttonIndex) == Mine::Planted) {
     DisplayBombsLocation();
@@ -123,9 +127,12 @@ int MainGUI::CountNeighbours(int buttonX, int buttonY) {
 }
 
 void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
+  const static std::unordered_map<wxString, wxString> labelMap = {
+      {"", L"🚩"}, {L"🚩", L"❓"}, {L"❓", ""}};
   const int buttonIndex = event.GetId() - 10000;
-  buttons.at(buttonIndex)->GetLabel() == "" ? buttons.at(buttonIndex)->SetLabel(L"🚩")
-                                            : buttons.at(buttonIndex)->SetLabel("");
+  const auto currentLabel = buttons.at(buttonIndex)->GetLabel();
+  const auto nextLabel = labelMap.at(currentLabel);
+  buttons.at(buttonIndex)->SetLabel(nextLabel);
 }
 
 void MainGUI::DisplayBombsLocation() {
@@ -158,12 +165,12 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
   buttonGrid->SetRows(fieldHeight);
 
   std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
+    const static wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     const int index = &mine - &fieldMines.front();
-    wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
     buttons.at(index) = std::make_unique<wxButton>(this, 10000 + index);
     buttons.at(index)->SetFont(font);
     buttons.at(index)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
-    buttons.at(index)->Bind(wxEVT_RIGHT_DOWN, &MainGUI::OnButtonRightClicked, this);
+    buttons.at(index)->Bind(wxEVT_RIGHT_UP, &MainGUI::OnButtonRightClicked, this);
     buttonGrid->Add(buttons.at(index).get(), 1, wxEXPAND | wxALL);
     fieldMines.at(index) = Mine::Empty;
   });
@@ -172,10 +179,10 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
 }
 
 void MainGUI::SetDifficulty(wxCommandEvent &event) {
-  const std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
+  const static std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
       {ID_EASY, std::make_tuple(8, 8, 10)},
       {ID_MEDIUM, std::make_tuple(16, 16, 40)},
-      {ID_HARD, std::make_tuple(16, 30, 99)}};
+      {ID_HARD, std::make_tuple(30, 16, 99)}};
 
   const auto lookupResult = difficulties.find(event.GetId());
   std::tie(fieldWidth, fieldHeight, mines) = lookupResult->second;
