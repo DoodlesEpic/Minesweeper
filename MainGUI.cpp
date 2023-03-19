@@ -175,7 +175,7 @@ void MainGUI::SetDifficulty(wxCommandEvent &event) {
   const std::unordered_map<int, std::tuple<int, int, int>> difficulties = {
       {ID_EASY, std::make_tuple(8, 8, 10)},
       {ID_MEDIUM, std::make_tuple(16, 16, 40)},
-      {ID_HARD, std::make_tuple(16, 30, 99)}};
+      {ID_HARD, std::make_tuple(30, 16, 99)}};
 
   const auto lookupResult = difficulties.find(event.GetId());
   std::tie(fieldWidth, fieldHeight, mines) = lookupResult->second;
