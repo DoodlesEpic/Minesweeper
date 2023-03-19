@@ -63,15 +63,12 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
   if (clickedSquares == 1) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> disX(0, fieldWidth - 1);
-    std::uniform_int_distribution<> disY(0, fieldHeight - 1);
+    std::uniform_int_distribution<> dis(0, fieldWidth * fieldHeight - 1);
 
     for (int minesPlanted = 0; minesPlanted < mines;) {
-      const int mineX = disX(gen);
-      const int mineY = disY(gen);
-      const int mineIndex = mineY * fieldWidth + mineX;
+      const int mineIndex = dis(gen);
 
-      if (fieldMines.at(mineIndex) == Mine::Empty && (mineX != buttonX || mineY != buttonY)) {
+      if (fieldMines.at(mineIndex) == Mine::Empty && mineIndex != buttonIndex) {
         fieldMines.at(mineIndex) = Mine::Planted;
         ++minesPlanted;
       }
