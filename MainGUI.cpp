@@ -48,9 +48,6 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 }
 
 void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
-  buttons.at(buttonIndex)->Enable(false);
-  ++clickedSquares;
-
   // Check if the button was a bomb
   if (fieldMines.at(buttonIndex) == Mine::Planted) {
     DisplayBombsLocation();
@@ -60,7 +57,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
   }
 
   // Field is generated on first click to guarantee no first click loss
-  if (clickedSquares == 1) {
+  if (clickedSquares == 0) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, fieldWidth * fieldHeight - 1);
@@ -75,11 +72,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
     }
   }
 
-  const int neighbourMines = CountNeighbours(buttonX, buttonY);
-  if (neighbourMines == 0)
-    return DiscoverEmpty(buttonX, buttonY);
-
-  buttons.at(buttonIndex)->SetLabel(std::to_string(neighbourMines));
+  Sweep(buttonX, buttonY);
   if (clickedSquares == (fieldWidth * fieldHeight) - mines) {
     DisplayBombsLocation();
     wxMessageBox("CHERNOBYL WAS AVOIDABLE, CONGRATULATIONS", "You won the game");
@@ -87,7 +80,7 @@ void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
   }
 }
 
-void MainGUI::DiscoverEmpty(int buttonX, int buttonY) {
+void MainGUI::Sweep(int buttonX, int buttonY) {
   buttons.at(buttonY * fieldWidth + buttonX)->Enable(false);
   buttons.at(buttonY * fieldWidth + buttonX)->SetLabel("");
   ++clickedSquares;
@@ -104,7 +97,7 @@ void MainGUI::DiscoverEmpty(int buttonX, int buttonY) {
         continue;
 
       if (buttons.at((buttonY + j) * fieldWidth + (buttonX + i))->IsEnabled())
-        DiscoverEmpty(buttonX + i, buttonY + j);
+        Sweep(buttonX + i, buttonY + j);
     }
   }
 }

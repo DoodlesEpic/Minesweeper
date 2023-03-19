@@ -29,7 +29,7 @@ protected:
 
   int CountNeighbours(int buttonX, int buttonY);
   void DiscoverMine(int buttonX, int buttonY, int buttonIndex);
-  void DiscoverEmpty(int buttonX, int buttonY);
+  void Sweep(int buttonX, int buttonY);
   void GenerateNewField(int newFieldWidth, int newFieldHeight, int newMines);
   void DisplayBombsLocation();
   void GameOverReset();
