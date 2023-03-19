@@ -127,9 +127,12 @@ int MainGUI::CountNeighbours(int buttonX, int buttonY) {
 }
 
 void MainGUI::OnButtonRightClicked(wxMouseEvent &event) {
+  const static std::unordered_map<wxString, wxString> labelMap = {
+      {"", L"🚩"}, {L"🚩", L"❓"}, {L"❓", ""}};
   const int buttonIndex = event.GetId() - 10000;
-  buttons.at(buttonIndex)->GetLabel() == "" ? buttons.at(buttonIndex)->SetLabel(L"🚩")
-                                            : buttons.at(buttonIndex)->SetLabel("");
+  const auto currentLabel = buttons.at(buttonIndex)->GetLabel();
+  const auto nextLabel = labelMap.at(currentLabel);
+  buttons.at(buttonIndex)->SetLabel(nextLabel);
 }
 
 void MainGUI::DisplayBombsLocation() {
@@ -167,7 +170,7 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
     buttons.at(index) = std::make_unique<wxButton>(this, 10000 + index);
     buttons.at(index)->SetFont(font);
     buttons.at(index)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
-    buttons.at(index)->Bind(wxEVT_RIGHT_DOWN, &MainGUI::OnButtonRightClicked, this);
+    buttons.at(index)->Bind(wxEVT_RIGHT_UP, &MainGUI::OnButtonRightClicked, this);
     buttonGrid->Add(buttons.at(index).get(), 1, wxEXPAND | wxALL);
     fieldMines.at(index) = Mine::Empty;
   });
