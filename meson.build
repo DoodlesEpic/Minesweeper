@@ -1,5 +1,5 @@
 project('Minesweeper', 'cpp',
-  version : '0.1',
+  version : '1.3',
   default_options : ['warning_level=3', 'cpp_std=c++17'])
 
 wx_dep = dependency(
