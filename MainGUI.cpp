@@ -165,8 +165,8 @@ void MainGUI::GenerateNewField(int newFieldWidth, int newFieldHeight, int newMin
   buttonGrid->SetRows(fieldHeight);
 
   std::for_each(fieldMines.begin(), fieldMines.end(), [this](const auto &mine) {
+    const static wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     const int index = &mine - &fieldMines.front();
-    wxFont font(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
     buttons.at(index) = std::make_unique<wxButton>(this, 10000 + index);
     buttons.at(index)->SetFont(font);
     buttons.at(index)->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGUI::OnButtonClicked, this);
