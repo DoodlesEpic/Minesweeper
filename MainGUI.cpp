@@ -48,6 +48,10 @@ void MainGUI::OnButtonClicked(wxCommandEvent &event) {
 }
 
 void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
+  // Immediatelly return if the button was flagged by the player
+  if (buttons.at(buttonIndex)->GetLabel() == L"🚩")
+    return;
+
   // Check if the button was a bomb
   if (fieldMines.at(buttonIndex) == Mine::Planted) {
     DisplayBombsLocation();
