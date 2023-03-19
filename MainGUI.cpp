@@ -40,14 +40,14 @@ MainGUI::MainGUI() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(30, 30), 
 
 // Handles the click of any button in the minesweeper grid
 void MainGUI::OnButtonClicked(wxCommandEvent &event) {
-  const int buttonX = (event.GetId() - 10000) % fieldWidth;
-  const int buttonY = (event.GetId() - 10000) / fieldHeight;
-  DiscoverMine(buttonX, buttonY);
+  const int buttonIndex = event.GetId() - 10000;
+  const int buttonX = buttonIndex % fieldWidth;
+  const int buttonY = buttonIndex / fieldHeight;
+  DiscoverMine(buttonX, buttonY, buttonIndex);
   event.Skip();
 }
 
-void MainGUI::DiscoverMine(int buttonX, int buttonY) {
-  const int buttonIndex = buttonY * fieldWidth + buttonX;
+void MainGUI::DiscoverMine(int buttonX, int buttonY, int buttonIndex) {
   buttons.at(buttonIndex)->Enable(false);
   ++clickedSquares;
 
