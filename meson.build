@@ -3,7 +3,7 @@ project('Minesweeper', 'cpp',
   default_options : ['warning_level=3', 'cpp_std=c++17'])
 
 wx_dep = dependency(
-  'wxwidgets', version : '>=3.0.0', modules : ['std', 'stc'],
+  'wxwidgets', version : '>=3.0.0', modules : ['core', 'base'], static : true,
 )
 
 executable('Minesweeper',
