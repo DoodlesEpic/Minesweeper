@@ -7,15 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(wxBUILD_SHARED OFF)
-set(wxBUILD_USE_STATIC_RUNTIME ON)
-
-set(wxWidgets_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/wxWidgets")
-set(wxWidgets_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/wxWidgets/lib/vc_x64_lib")
-set(wxWidgets_CONFIGURATION  "msw")
+if (WIN32)
+  set(wxBUILD_USE_STATIC_RUNTIME ON)
+endif()
 
 add_subdirectory(libs/wxWidgets)
 add_executable(Minesweeper
-  WIN32
   App.cpp
   MainGUI.cpp
 )
