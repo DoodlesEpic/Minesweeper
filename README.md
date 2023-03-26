@@ -31,6 +31,8 @@ Compile wxWidgets and the application using:
 cmake --build build -j8
 ```
 
+You may omit -j8 if you are using Ninja or MSVC as a backend, since those will already use all available threads by default.
+
 The final executable will be available under the build folder with the name Minesweeper and the appropriate file extension depending on your system.
 
 ## License
