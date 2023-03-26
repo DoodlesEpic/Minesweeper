@@ -10,7 +10,7 @@ Grab the executable appropriate for your system in the [GitHub Releases page](ht
 
 ## Development
 
-This is application is developed using C++, the [CMake build system](https://cmake.org/), and the [wxWidgets UI library](https://wxwidgets.org/). You must set up each one of those dependencies in your system, installation will differ for each operating system, so follow the guide on each website. The recommended compiler to use under Windows is Clang under [MSYS2](https://www.msys2.org/).
+This is application is developed using C++, the [CMake build system](https://cmake.org/), and the [wxWidgets UI library](https://wxwidgets.org/). You must set up each one of those dependencies in your system, installation will differ for each operating system, so follow the guide on each website. The recommended compiler to use under Windows is [MSVC](https://learn.microsoft.com/en-us/cpp/), which can be [installed through Visual Studio](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation). Otherwise, you may also use Clang under [MSYS2](https://www.msys2.org/).
 
 If you're using an Ubuntu-based distribution, you may install the needed dependencies using the following command:
 
