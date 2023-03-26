@@ -6,22 +6,29 @@ A simple, native, and cross-platform Minesweeper game made with wxWidgets.
 
 ## Installation
 
-Grab the executable appropriate to your system in the [GitHub Releases page](https://github.com/DoodlesEpic/Minesweeper/releases/) and start playing, no installation needed.
+Grab the executable appropriate for your system in the [GitHub Releases page](https://github.com/DoodlesEpic/Minesweeper/releases/) and start playing, no installation needed.
 
 ## Development
 
-This is application is developed using C++, the [Meson Build system](https://mesonbuild.com/), and [wxWidgets UI library](https://wxwidgets.org/). You must set up each one of those dependencies in your system, installation will differ for each operating system, so follow the guide on each website. The recommended compiler to use under Windows is Clang under [MSYS2](https://www.msys2.org/).
+This is application is developed using C++, the [CMake build system](https://cmake.org/), and the [wxWidgets UI library](https://wxwidgets.org/). You must set up each one of those dependencies in your system, installation will differ for each operating system, so follow the guide on each website. The recommended compiler to use under Windows is Clang under [MSYS2](https://www.msys2.org/).
+
+If you're using an Ubuntu-based distribution, you may install the needed dependencies using the following command:
+
+```sh
+sudo apt install build-essential git cmake libgtk-3-dev
+```
 
 To start development, clone the repository and run in the root folder:
 
 ```sh
-meson setup build -Dbuildtype=debugoptimized
+git submodule update --init --recursive --progress
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Debug
 ```
 
-Then compile the application using:
+Compile wxWidgets and the application using:
 
 ```sh
-meson compile -C build
+cmake --build build -j8
 ```
 
 The final executable will be available under the build folder with the name Minesweeper and the appropriate file extension depending on your system.
