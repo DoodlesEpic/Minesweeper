@@ -13,6 +13,7 @@ endif()
 
 add_subdirectory(libs/wxwidgets)
 add_executable(Minesweeper
+  WIN32
   App.cpp
   MainGUI.cpp
 )
