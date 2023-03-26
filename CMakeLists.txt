@@ -11,7 +11,7 @@ if (WIN32)
   set(wxBUILD_USE_STATIC_RUNTIME ON)
 endif()
 
-add_subdirectory(libs/wxWidgets)
+add_subdirectory(libs/wxwidgets)
 add_executable(Minesweeper
   App.cpp
   MainGUI.cpp
